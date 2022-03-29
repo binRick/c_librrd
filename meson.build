@@ -40,6 +40,7 @@ incdir = include_directories(
   '/usr/local/lib64',
 )
 
+#//***********************************************************/
 test1 = executable('test1', 
   [
     'tests/test1.c', 
@@ -48,9 +49,18 @@ test1 = executable('test1',
   include_directories : [incdir],
   dependencies : [],
 )
+test2 = executable('test2', 
+  [
+    'tests/test2.c', 
+    'src/rrd.c', 
+  ],
+  include_directories : [incdir],
+  dependencies : [],
+)
 
 test_bins = [
   'test1', 
+  'test2', 
 ]
 
 test_env = environment()
@@ -59,13 +69,15 @@ test_env.set('__BD', meson.current_build_dir())
 test_env.set('__SD', meson.current_source_dir())
 
 
-foreach bin : test_bins
-    test('test1 help 1', test1, args: ['--help'],
+    test('help 1', test1, args: ['--help'],
       env : test_env,
     )
     test('test1 help 2', test1, args: ['-h'],
       env : test_env,
     )
-endforeach
+    test('test2 help 1', test2, args: ['--help'],
+      env : test_env,
+    )
+#//***********************************************************/
 
 
