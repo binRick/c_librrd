@@ -10,7 +10,7 @@ enum {
 
 char *SSH_AUTH_TYPES[] = {
   "password",
-  "private_key",
+  "publickey",
   NULL,
 };
 

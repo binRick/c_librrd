@@ -3,39 +3,15 @@
 #include <stdio.h>
 
 
-int SshAuthPassword_sshinit(VSelf){
+int SshAuthPassword_exec_cmd(VSelf, char *exec_ssh_cmd){
   VSELF(SshAuthPassword);
-  return(SSH_sshinit(self->auth));
+  return(SSH_exec_cmd(self->auth, exec_ssh_cmd));
 }
 
 
-int SshAuthPrivateKey_sshinit(VSelf){
+int SshAuthPrivateKey_exec_cmd(VSelf, char *exec_ssh_cmd){
   VSELF(SshAuthPrivateKey);
-  return(SSH_sshinit(self->auth));
-}
-
-
-int SshAuthPassword_exec(VSelf, char *cmd){
-  VSELF(SshAuthPassword);
-  return(SSH_exec(self->auth, cmd));
-}
-
-
-int SshAuthPrivateKey_exec(VSelf, char *cmd){
-  VSELF(SshAuthPrivateKey);
-  return(SSH_exec(self->auth, cmd));
-}
-
-
-int SshAuthPassword_connect(VSelf){
-  VSELF(SshAuthPassword);
-  return(SSH_sshconnect(self->auth));
-}
-
-
-int SshAuthPrivateKey_connect(VSelf){
-  VSELF(SshAuthPrivateKey);
-  return(SSH_sshconnect(self->auth));
+  return(SSH_exec_cmd(self->auth, exec_ssh_cmd));
 }
 
 
@@ -66,5 +42,8 @@ int SshAuthPassword_config(VSelf, char *host, unsigned int port, char *username,
   return(2);
 }
 
-impl(SSH, SshAuthPassword);
-impl(SSH, SshAuthPrivateKey);
+#define ADD_SSH_AUTH_TYPE(TYPE) \
+  impl(SSH, TYPE)               \
+
+ADD_SSH_AUTH_TYPE(SshAuthPassword);
+ADD_SSH_AUTH_TYPE(SshAuthPrivateKey);
