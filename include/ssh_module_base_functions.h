@@ -69,9 +69,9 @@ int SSH_sshinit(SshAuth *auth){
 
 int SSH_sshconnect(SshAuth *auth) {
   printf("SSH Connecting host type %s|host:%s:%d\n", auth->type, auth->host, auth->port);
-    size_t                         userauthlist_qty;
+  size_t                         userauthlist_qty;
 
-      char                           *userauthlist;
+  char                           *userauthlist;
 
   struct StringBuffer            *sout    = stringbuffer_new_with_options(1024, true);
   LIBSSH2_SESSION                *session = NULL;
@@ -81,16 +81,11 @@ int SSH_sshconnect(SshAuth *auth) {
   int                            sock;
   struct sockaddr_in             sin;
   const char                     *fingerprint;
-  char m[1024];
-
-
-
-
-
-
+  char                           m[1024];
 
 
   int rc = libssh2_init(0);
+
   if (rc != 0) {
     log_error("libssh2 initialization failed (%d)", rc);
     return(1);
@@ -111,56 +106,56 @@ int SSH_sshconnect(SshAuth *auth) {
     return(-1);
   }
   sin.sin_port = htons(auth->port);
-    if (connect(sock, (struct sockaddr *)(&sin), sizeof(struct sockaddr_in)) != 0) {
-        log_error("Failed to connect to %s:%d", auth->host,auth->port);
-        return(-1);
-    }
-   
-    sprintf(m, "Connect %s:%d OK", auth->host, auth->port);
-   log_debug(m);
-   log_info("SSH Session Initializing");
-    session = libssh2_session_init();
-    if (!session) {
+  if (connect(sock, (struct sockaddr *)(&sin), sizeof(struct sockaddr_in)) != 0) {
+    log_error("Failed to connect to %s:%d", auth->host, auth->port);
+    return(-1);
+  }
+
+  sprintf(m, "Connect %s:%d OK", auth->host, auth->port);
+  log_debug(m);
+  log_info("SSH Session Initializing");
+  session = libssh2_session_init();
+  if (!session) {
     fprintf(stderr, "Could not initialize the SSH session!\n");
     return(-1);
-    }
-    log_info("SSH Session OK");
-   if (libssh2_session_handshake(session, sock)) {
-   fprintf(stderr, "Failure establishing SSH session\n");
-   return(1);
-   }
-   log_info("SSH Handshake OK");
-    /*
-  
-  fingerprint = libssh2_hostkey_hash(session, LIBSSH2_HOSTKEY_HASH_SHA1);
-  info("Fingerprint OK");
-   
-   
-    userauthlist = libssh2_userauth_list(session, auth->username, strlen(auth->username));
-    char sstr[1024 * 1024];
-   
-   sprintf(sstr, "%s", userauthlist);
-   char **ual  = strsplit(sstr, ",");
-   char **ualq = strsplit_count(userauthlist, ",", &userauthlist_qty);
-  
-  sprintf(m, "%d Authentication methods: %s", userauthlist_qty, userauthlist);
- log_debug(m);
- if (strstr(userauthlist, "publickey") == NULL) {
- log_error("\"publickey\" authentication is not supported\n");
-    goto shutdown;
-    }
-    sprintf(m, "SSH Public Key Auth Method for %s OK", auth->username);
-    debug(m);
-
-shutdown:
-  libssh2_session_disconnect(session,"Normal Shutdown, Thank you for playing");
-  libssh2_session_free(session);
-  close(sock);
-  log_info("SSH Done");
-  libssh2_exit();
-*/
+  }
+  log_info("SSH Session OK");
+  if (libssh2_session_handshake(session, sock)) {
+    fprintf(stderr, "Failure establishing SSH session\n");
+    return(1);
+  }
+  log_info("SSH Handshake OK");
+  /*
+   *
+   * fingerprint = libssh2_hostkey_hash(session, LIBSSH2_HOSTKEY_HASH_SHA1);
+   * info("Fingerprint OK");
+   *
+   *
+   * userauthlist = libssh2_userauth_list(session, auth->username, strlen(auth->username));
+   * char sstr[1024 * 1024];
+   *
+   * sprintf(sstr, "%s", userauthlist);
+   * char **ual  = strsplit(sstr, ",");
+   * char **ualq = strsplit_count(userauthlist, ",", &userauthlist_qty);
+   *
+   * sprintf(m, "%d Authentication methods: %s", userauthlist_qty, userauthlist);
+   * log_debug(m);
+   * if (strstr(userauthlist, "publickey") == NULL) {
+   * log_error("\"publickey\" authentication is not supported\n");
+   * goto shutdown;
+   * }
+   * sprintf(m, "SSH Public Key Auth Method for %s OK", auth->username);
+   * debug(m);
+   *
+   * shutdown:
+   * libssh2_session_disconnect(session,"Normal Shutdown, Thank you for playing");
+   * libssh2_session_free(session);
+   * close(sock);
+   * log_info("SSH Done");
+   * libssh2_exit();
+   */
   return(0);
-}
+} // SSH_sshconnect
 
 
 int SSH_connect(SshAuth *auth) {
