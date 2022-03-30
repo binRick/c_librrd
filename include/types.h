@@ -1,6 +1,7 @@
 #include "interface99/interface99.h"
 #include "metalang99/include/metalang99.h"
 #include <stdio.h>
+#include <stdbool.h>
 
 enum {
   SSH_AUTH_PASSWORD = 0,
@@ -28,6 +29,7 @@ typedef struct SshAuth {
   char           *host;
   char           *secret;
   char           *username;
+  bool ok;
   SshCredentials *creds;
 } SshAuth;
 

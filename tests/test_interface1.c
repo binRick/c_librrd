@@ -11,21 +11,25 @@
 /*********************************/
 
 
-void test_ssh(SSH ssh, char *secret){
+void test_ssh(SSH ssh, char *secret, char *cmd){
   printf("ssh connect start\n");
   int res  = VCALL(ssh, config, "127.0.0.1", 22, "tu", secret);
   int ping = VCALL(ssh, ping);
 
   printf("ping result = %d\n", ping);
+  int connect = VCALL(ssh, connect);
+  int e       = VCALL(ssh, exec, cmd);
+  int i       = VCALL(ssh, sshinit);
 }
 
 
 void main_ssh(){
-  SSH ssh_password   = DYN_LIT(SshAuthPassword, SSH, { });
-  SSH ssh_privatekey = DYN_LIT(SshAuthPrivateKey, SSH, {});
+  SSH  ssh_password   = DYN_LIT(SshAuthPassword, SSH, { });
+  SSH  ssh_privatekey = DYN_LIT(SshAuthPrivateKey, SSH, {});
+  char *cmd           = "hostname";
 
-  test_ssh(ssh_password, "xxxxxxxxxx");
-  test_ssh(ssh_privatekey, "yyyyyyyyyyyyyy");
+  test_ssh(ssh_password, "xxxxxxxxxx", cmd);
+  test_ssh(ssh_privatekey, "yyyyyyyyyyyyyy", cmd);
 }
 
 

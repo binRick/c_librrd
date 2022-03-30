@@ -2,15 +2,53 @@
 #include "metalang99/include/metalang99.h"
 #include <stdio.h>
 
-int SshAuthPassword_ping(VSelf, SSH ssh){
+
+int SshAuthPassword_sshinit(VSelf){
+  VSELF(SshAuthPassword);
+  return(SSH_sshinit(self->auth));
+}
+
+
+int SshAuthPrivateKey_sshinit(VSelf){
+  VSELF(SshAuthPrivateKey);
+  return(SSH_sshinit(self->auth));
+}
+
+int SshAuthPassword_exec(VSelf, char *cmd){
+  VSELF(SshAuthPassword);
+  return(SSH_exec(self->auth, cmd));
+}
+
+
+int SshAuthPrivateKey_exec(VSelf, char *cmd){
+  VSELF(SshAuthPrivateKey);
+  return(SSH_exec(self->auth, cmd));
+}
+
+
+int SshAuthPassword_connect(VSelf){
+  VSELF(SshAuthPassword);
+  return(SSH_connect(self->auth));
+}
+
+
+int SshAuthPrivateKey_connect(VSelf){
+  VSELF(SshAuthPrivateKey);
+  return(SSH_connect(self->auth));
+}
+
+
+int SshAuthPassword_ping(VSelf){
   VSELF(SshAuthPassword);
   return(SSH_ping(self->auth));
 }
 
-int SshAuthPrivateKey_ping(VSelf, SSH ssh){
+
+int SshAuthPrivateKey_ping(VSelf){
   VSELF(SshAuthPrivateKey);
   return(SSH_ping(self->auth));
 }
+
 
 int SshAuthPrivateKey_config(VSelf, char *host, unsigned int port, char *username, char *secret){
   VSELF(SshAuthPrivateKey);
