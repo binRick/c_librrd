@@ -15,7 +15,7 @@
  * ```
  */
 #ifndef clib_module
-#define clib_module(type) struct __##type##_clib_module
+#define clib_module(type)    struct __ ## type ## _clib_module
 #endif
 
 /**
@@ -28,11 +28,11 @@
  * ```
  */
 #ifndef clib_module_exports
-#define clib_module_exports(type)                                              \
-  typedef clib_module(type) type##_t;                                          \
-  clib_module(type) *__##type##_clib_module;                                   \
-  static unsigned int __##type##_clib_module_init = 0;                         \
-  static clib_module(type) __##type##_clib_module_exports =                    \
+#define clib_module_exports(type)                               \
+  typedef clib_module(type) type ## _t;                         \
+  clib_module(type) * __ ## type ## _clib_module;               \
+  static unsigned int __ ## type ## _clib_module_init = 0;      \
+  static clib_module(type) __ ## type ## _clib_module_exports = \
 
 #endif
 
@@ -46,10 +46,10 @@
  * ```
  */
 #ifndef clib_module_fields
-#define clib_module_fields(type)                                               \
-  const char *name;                                                            \
-  int (*init)(clib_module(type) *exports);                                     \
-  void (*deinit)(clib_module(type) *exports);                                  \
+#define clib_module_fields(type)              \
+  const char *name;                           \
+  int (*init)(clib_module(type) *exports);    \
+  void (*deinit)(clib_module(type) *exports); \
 
 #endif
 
@@ -64,17 +64,17 @@
  * ```
  */
 #ifndef CLIB_MODULE
-#define CLIB_MODULE clib_module_fields
+#define CLIB_MODULE    clib_module_fields
 #endif
 
 /**
  * The default module field initialization.
  */
 #ifndef CLIB_MODULE_DEFAULT
-#define CLIB_MODULE_DEFAULT(type)  \
-  .name = ""#type,                 \
-  .init = 0,                       \
-  .deinit = 0                      \
+#define CLIB_MODULE_DEFAULT(type) \
+    .name = ""#type,              \
+  .init   = 0,                    \
+  .deinit = 0                     \
 
 #endif
 
@@ -88,7 +88,7 @@
  * ```
  */
 #ifndef clib_module_defaults
-#define clib_module_defaults(type, prototype) prototype(type)
+#define clib_module_defaults(type, prototype)    prototype(type)
 #endif
 
 /**
@@ -120,7 +120,7 @@
  * ```
  */
 #ifndef clib_module_define
-#define clib_module_define(module, prototype) prototype(module)
+#define clib_module_define(module, prototype)    prototype(module)
 #endif
 
 /**
@@ -128,16 +128,16 @@
  * a module `init()` function.
  */
 #ifndef clib_module_init
-#define clib_module_init(type, exports)                                        \
-  __##type##_clib_module_init = 1;                                             \
-  if (0 != (__##type##_clib_module)) {                                         \
-    __##type##_clib_module->name = ""#type;                                   \
-  }                                                                            \
-  /** marks the following variables as "used" */                               \
-  (void) (__##type##_clib_module_exports);                                     \
-  (void) (__##type##_clib_module_init);                                        \
-  (void) (__##type##_clib_module);                                             \
-  (void) (exports);                                                            \
+#define clib_module_init(type, exports)          \
+  __ ## type ## _clib_module_init = 1;           \
+  if (0 != (__ ## type ## _clib_module)) {       \
+    __ ## type ## _clib_module->name = ""#type;  \
+  }                                              \
+  /** marks the following variables as "used" */ \
+  (void)(__ ## type ## _clib_module_exports);    \
+  (void)(__ ## type ## _clib_module_init);       \
+  (void)(__ ## type ## _clib_module);            \
+  (void)(exports);                               \
 
 #endif
 
@@ -147,9 +147,9 @@
  * `deinit()` module function.
  */
 #ifndef clib_module_deinit
-#define clib_module_deinit(type)                                               \
-  __##type##_clib_module = 0;                                                  \
-  __##type##_clib_module_init = 0;                                             \
+#define clib_module_deinit(type)       \
+  __ ## type ## _clib_module = 0;      \
+  __ ## type ## _clib_module_init = 0; \
 
 #endif
 
@@ -157,12 +157,12 @@
  * Frees a module pointer and calls `deinit()` right before.
  */
 #ifndef clib_module_free
-#define clib_module_free(module)                                               \
-  if (0 != (module)) {                                                         \
-    if (0 != (module)->deinit) {                                               \
-      (module)->deinit((module));                                              \
-    }                                                                          \
-    free(module);                                                              \
+#define clib_module_free(module)  \
+  if (0 != (module)) {            \
+    if (0 != (module)->deinit) {  \
+      (module)->deinit((module)); \
+    }                             \
+    free(module);                 \
   }
 
 #endif
