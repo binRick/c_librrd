@@ -35,6 +35,7 @@ add_project_arguments(
 incdir = include_directories(
   'include', 
   '../',
+  '../metalang99/include',
   '/usr/lib64',
   '/usr/local/include',
   '/usr/local/lib64',
@@ -57,10 +58,20 @@ test2 = executable('test2',
   include_directories : [incdir],
   dependencies : [],
 )
+test_interface1 = executable('test_interface1', 
+  [
+    'src/rrd.c', 
+    'include/rrd.h', 
+    'tests/test_interface1.c', 
+  ],
+  include_directories : [incdir],
+  dependencies : [],
+)
 
 test_bins = [
   'test1', 
   'test2', 
+  'test_interface1', 
 ]
 
 test_env = environment()
@@ -76,6 +87,9 @@ test_env.set('__SD', meson.current_source_dir())
       env : test_env,
     )
     test('test2 help 1', test2, args: ['--help'],
+      env : test_env,
+    )
+    test('test_interface1', test_interface1, args: ['--help'],
       env : test_env,
     )
 #//***********************************************************/
