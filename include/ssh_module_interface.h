@@ -11,7 +11,7 @@
 #define SSH_IFACE_PING    \
   vfunc(int, ping, VSelf) \
 
-#define SSH_IFACE_SSHINIT                                                                 \
+#define SSH_IFACE_SSHINIT \
   vfunc(int, sshinit, VSelf)
 
 #define SSH_IFACE_CONFIG                                                                 \
@@ -21,8 +21,8 @@
   SSH_IFACE_CONFIG      \
   SSH_IFACE_PING        \
   SSH_IFACE_CONNECT     \
-  SSH_IFACE_EXEC      \
-  SSH_IFACE_SSHINIT      \
+  SSH_IFACE_EXEC        \
+    SSH_IFACE_SSHINIT   \
 
 #define SSH_IFACE \
   SSHCOMMON_IFACE \

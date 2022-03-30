@@ -17,9 +17,10 @@ void test_ssh(SSH ssh, char *secret, char *cmd){
   int ping = VCALL(ssh, ping);
 
   printf("ping result = %d\n", ping);
-  int connect = VCALL(ssh, connect);
-  int e       = VCALL(ssh, exec, cmd);
   int i       = VCALL(ssh, sshinit);
+//  int i       = VCALL(ssh, sshconnect);
+  int connect = VCALL(ssh, connect);
+//  int e       = VCALL(ssh, exec, cmd);
 }
 
 

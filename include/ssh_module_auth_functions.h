@@ -14,6 +14,7 @@ int SshAuthPrivateKey_sshinit(VSelf){
   return(SSH_sshinit(self->auth));
 }
 
+
 int SshAuthPassword_exec(VSelf, char *cmd){
   VSELF(SshAuthPassword);
   return(SSH_exec(self->auth, cmd));
@@ -28,13 +29,13 @@ int SshAuthPrivateKey_exec(VSelf, char *cmd){
 
 int SshAuthPassword_connect(VSelf){
   VSELF(SshAuthPassword);
-  return(SSH_connect(self->auth));
+  return(SSH_sshconnect(self->auth));
 }
 
 
 int SshAuthPrivateKey_connect(VSelf){
   VSELF(SshAuthPrivateKey);
-  return(SSH_connect(self->auth));
+  return(SSH_sshconnect(self->auth));
 }
 
 
