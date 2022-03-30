@@ -9,23 +9,23 @@
 /*********************************/
 #include "include/rrd.h"
 /*********************************/
-/*********************************/
-/*********************************/
 
 
-void test_ssh(SSH ssh){
-  int res = VCALL(ssh, connect, "127.0.0.1", 22, "testuser", 1000);
+void test_ssh(SSH ssh, char *secret){
+  printf("ssh connect start\n");
+  int res  = VCALL(ssh, config, "127.0.0.1", 22, "tu", secret);
+  int ping = VCALL(ssh, ping);
 
-  printf("ssh connect result = %d\n", res);
+  printf("ping result = %d\n", ping);
 }
 
 
 void main_ssh(){
-  SSH ssh_password   = DYN_LIT(SshAuthPassword, SSH, {});
+  SSH ssh_password   = DYN_LIT(SshAuthPassword, SSH, { });
   SSH ssh_privatekey = DYN_LIT(SshAuthPrivateKey, SSH, {});
 
-  test_ssh(ssh_password);
-  test_ssh(ssh_privatekey);
+  test_ssh(ssh_password, "xxxxxxxxxx");
+  test_ssh(ssh_privatekey, "yyyyyyyyyyyyyy");
 }
 
 

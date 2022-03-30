@@ -3,9 +3,10 @@ set -eou pipefail
 reset
 
 BD="$(pwd)/.build"
-
+[[ -d .build ]] && rm -rf .build
 if [[ -d "$BD" ]]; then
-	meson --reconfigure --wipe $BD
+	meson build -C $BD
+	#meson --reconfigure --wipe $BD
 else
 	meson $BD
 fi

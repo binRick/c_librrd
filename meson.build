@@ -1,34 +1,31 @@
+
 project(
     'c_librrd', ['c'],
     version : '0.0.1',
-    default_options : ['c_std=gnu99'],
     default_options : [
+      'c_std=gnu99',
       'warning_level=2',
     ],
 )
 
-pkg = import('pkgconfig')
-sh = find_program('sh', required : true)
-rrdtool = find_program('rrdtool', required : true)
+host_system = host_machine.system()
 
 cc = meson.get_compiler('c')
 
-add_project_arguments(
-  cc.get_supported_arguments([
-    '-lm',
-    '-luv',
-    '-lcurl',
-    '-lshmc',
-    '-lvterm',
-  ]),
-  language : 'c',
-)
+pkg = import('pkgconfig')
 
-add_project_arguments(
-  cc.get_supported_arguments([
-    '-D_GNU_SOURCE',
-    '-fPIC',
-  ]),
+libssh2 = dependency('libssh2', required : true)
+openssl = dependency('openssl', required : true)
+threads = dependency('threads', required : true)
+
+sh = find_program('sh', required : true)
+rrdtool = find_program('rrdtool', required : true)
+
+add_global_arguments(
+  '-lpthread', 
+  '-luv', 
+  '-lcurl', 
+  '-lrvfs', 
   language : 'c',
 )
 
@@ -60,13 +57,16 @@ test2 = executable('test2',
 )
 test_interface1 = executable('test_interface1', 
   [
-    'src/rrd.c', 
     'include/rrd.h', 
+    'include/ssh.h', 
+    'src/rrd.c', 
+    'src/ssh.c', 
     'tests/test_interface1.c', 
   ],
   include_directories : [incdir],
-  dependencies : [],
+  dependencies : [libssh2, openssl],
 )
+
 
 test_bins = [
   'test1', 
@@ -74,24 +74,21 @@ test_bins = [
   'test_interface1', 
 ]
 
+#//***********************************************************/
 test_env = environment()
 test_env.set('__SH', sh.full_path())
 test_env.set('__BD', meson.current_build_dir())
 test_env.set('__SD', meson.current_source_dir())
-
-
-    test('help 1', test1, args: ['--help'],
-      env : test_env,
-    )
-    test('test1 help 2', test1, args: ['-h'],
-      env : test_env,
-    )
-    test('test2 help 1', test2, args: ['--help'],
-      env : test_env,
-    )
-    test('test_interface1', test_interface1, args: ['--help'],
-      env : test_env,
-    )
+#//***********************************************************/
+test('help 1', test1, args: ['--help'],
+  env : test_env,
+)
+test('test2 help 1', test2, args: ['--help'],
+  env : test_env,
+)
+test('test_interface1', test_interface1, args: ['--help'],
+  env : test_env,
+)
 #//***********************************************************/
 
 
